@@ -17,6 +17,23 @@ public class MorseConverter {
 
     }
 
+    public String getTextInMorseCode(String text){
+        StringBuilder stringBuilder = new StringBuilder();
+        char[] textChars = text.toUpperCase().toCharArray();
+        for(int i = 0 ; i < textChars.length ; i++){
+            if(isALetter(textChars[i] + "")){
+                stringBuilder.append(letters[textChars[i] - 'A']);
+                stringBuilder.append(" ");
+            }else if(isANumber(textChars[i] + "")){
+                stringBuilder.append(numbers[textChars[i] - '0']);
+                stringBuilder.append(" ");
+            }else{
+                stringBuilder.append(" / ");
+            }
+        }
+        return stringBuilder.toString();
+    }
+
     private String[] fillLetterArrayWithSigns(String[] letters){
         letters[0] = "._"; //A
         letters[1] = "_..."; //B
