@@ -1,5 +1,7 @@
 package converter;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,6 +10,8 @@ public class MorseConverter {
     private String[] letters;
     private String[] numbers;
 
+    private Map<String, String> morseToTextMap;
+
     public MorseConverter(){
         this.letters = new String[26];
         this.letters = fillLetterArrayWithSigns(letters);
@@ -15,6 +19,8 @@ public class MorseConverter {
         this.numbers = new String[10];
         this.numbers = fillNumberArrayWithSigns(numbers);
 
+        this.morseToTextMap = new HashMap<>();
+        this.morseToTextMap = fillMorseToTextMap(morseToTextMap);
     }
 
     public String getTextInMorseCode(String text){
@@ -28,9 +34,33 @@ public class MorseConverter {
                 stringBuilder.append(numbers[textChars[i] - '0']);
                 stringBuilder.append(" ");
             }else{
-                stringBuilder.append(" / ");
+                stringBuilder.append("/ ");
             }
         }
+        return stringBuilder.toString();
+    }
+
+    public String getText(String morseCode){
+        StringBuilder stringBuilder = new StringBuilder();
+        char[] morseCodeChars = morseCode.toCharArray();
+
+        String pom = "";
+        for(int i = 0 ; i < morseCode.length() ; i++){
+            if(morseCodeChars[i] == ' '){
+                stringBuilder.append(morseToTextMap.get(pom));
+                pom = "";
+            }
+            else if(morseCodeChars[i] == '/'){
+                stringBuilder.append(" ");
+                i++;
+            }else{
+                pom += morseCodeChars[i];
+                if(morseCode.length() - 1 == i){
+                    stringBuilder.append(morseToTextMap.get(pom));
+                }
+            }
+        }
+
         return stringBuilder.toString();
     }
 
@@ -78,6 +108,20 @@ public class MorseConverter {
         numbers[9] = "____."; //9
 
         return numbers;
+    }
+
+    private Map<String, String> fillMorseToTextMap(Map<String, String> map){
+        for(int i = 0 ; i < letters.length ; i++){
+            char value = (char)('A' + i);
+            map.put(letters[i], value +"");
+        }
+
+        for(int i = 0 ; i < numbers.length ; i++){
+            char value = (char)('0' + i);
+            map.put(numbers[i], value +"");
+        }
+
+        return map;
     }
 
     private boolean isALetter(String s){
