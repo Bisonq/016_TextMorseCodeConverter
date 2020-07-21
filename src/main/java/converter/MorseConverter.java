@@ -1,5 +1,8 @@
 package converter;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MorseConverter {
 
     private String[] letters;
@@ -58,5 +61,17 @@ public class MorseConverter {
         numbers[9] = "____."; //9
 
         return numbers;
+    }
+
+    private boolean isALetter(String s){
+        Pattern pattern = Pattern.compile("[A-Z]");
+        Matcher matcher = pattern.matcher(s);
+        return matcher.matches();
+    }
+
+    private boolean isANumber(String s){
+        Pattern pattern = Pattern.compile("[0-9]");
+        Matcher matcher = pattern.matcher(s);
+        return matcher.matches();
     }
 }
